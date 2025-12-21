@@ -4,10 +4,13 @@ import messageroute from "./routes/message.routes.js"
 import path from "path"
 import connection from "./lib/db.js"
 import { ENV } from "./lib/env.js"
+import cookieParser from "cookie-parser"
+
 
 
 const app=express()
 app.use(express.json())
+app.use(cookieParser)
 
 const PORT=ENV.PORT || 5000
 
