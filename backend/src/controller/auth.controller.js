@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs"
 import generatetoken from "../lib/utils.js";
+import { sendWelcomeEmail } from "../email/emailHandlers.js";
+import { ENV } from "../lib/env.js";
 
 
 export const singup = async (req, res) => {
@@ -49,6 +51,14 @@ export const singup = async (req, res) => {
                 id: newuser._id,
                 token: token
             })
+
+
+            try {
+                await sendWelcomeEmail(saveduser.email,saveduser.fullName, ENV.CLIENT_URL)
+                
+            } catch (error) {
+                console.log("failed to send welcome email: ",error.message)
+            }
         }
         else{
             res.status(400).json({
