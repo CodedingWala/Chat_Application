@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
-    "node":">=20.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build":"npm install --prefix  backend && npm install --prefix frontend  && npm run build --prefix  frontend",
-    "start":"npm run start --prefix backend"
+    "build": "npm install --prefix  backend && npm install --prefix frontend  && npm run build --prefix  frontend",
+    "start": "npm run start --prefix backend"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,9 @@
     "url": "https://github.com/CodedingWala/Chat_Application/issues"
   },
   "homepage": "https://github.com/CodedingWala/Chat_Application#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "cloudinary": "^2.5.1",
+    "react-router-dom": "^7.11.0"
+  }
 }
