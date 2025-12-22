@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs"
 import generatetoken from "../lib/utils.js";
 import { sendWelcomeEmail } from "../email/emailHandlers.js";
 import { ENV } from "../lib/env.js";
+import cloudinary from "../lib/cloudinary.js";
+import axios from "axios"
 
 
 export const singup = async (req, res) => {
@@ -123,3 +125,71 @@ export const logout = async (_, res) => {
     res.status(200).json({ message: "user logged out" })
 
 }
+
+
+export const googleAuth = async (req, res) => {
+    
+    const { token } = req.body;
+    try {
+        // Verify Google ID token
+        const googleRes = await axios.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`
+        );
+
+        const { email, name, picture, sub } = googleRes.data;
+
+        // Check if user exists in MongoDB
+        let user = await User.findOne({ email });
+        if (!user) {
+            user =  await User.create({
+                fullName: name,
+                email,
+                profilePic: picture,
+                password: sub,
+            });
+        }
+
+
+          try {
+                await sendWelcomeEmail(user.email, user.fullName, ENV.CLIENT_URL)
+
+            } catch (error) {
+                console.log("failed to send welcome email: ", error.message)
+
+            }
+
+
+
+        // Create JWT for your app
+
+        const jwttoken = generatetoken(user._id, res)
+        res.status(200).json({
+            fullName: user.fullName,
+            email: user.email,
+            id: user._id,
+            token: jwttoken
+        })
+    } catch (err) {
+        console.error("Google Auth Error:", err.message);
+        res.status(400).json({ message: "internel server error" });
+    }
+}
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { profilePic } = req.body
+        if (!profilePic) {
+            return res.status(400).json({ message: "profile pic is required" })
+        }
+        const userId = req.usr._id
+        const uploadresponse = cloudinary.uploader.upload(profilePic)
+        const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: uploadresponse.secure_url }, { new: true })
+
+        res.status(200).json(updatedUser)
+
+    } catch (error) {
+        console.log("error occured inside the update profile controller:", error.message)
+        return res.status(500).json({ message: "internel server error" })
+
+    }
+}
+
