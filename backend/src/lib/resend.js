@@ -1,8 +1,8 @@
-import {Resend} from "resend"
+import {Resend} from "resend" //importing package of resend
 import {ENV} from "./env.js"
 
 
-export const resendClient=new Resend(ENV.API_KEY)
+export const resendClient=new Resend(ENV.RESEND_API_KEY)
 
 export const sender={
     email:ENV.EMAIL_FROM,
