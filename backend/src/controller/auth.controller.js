@@ -53,8 +53,8 @@ export const singup = async (req, res) => {
                 id: newuser._id,
             }
             res.status(201).json({
-                user:sendUser,
-                token:token
+                user: sendUser,
+                token: token
             })
 
 
@@ -100,10 +100,13 @@ export const login = async (req, res) => {
 
 
         const token = generatetoken(user._id, res)
-        res.status(200).json({
+        let sendUser = {
             fullName: user.fullName,
             email: user.email,
             id: user._id,
+        }
+        res.status(200).json({
+            user: sendUser,
             token: token
         })
 
@@ -165,10 +168,13 @@ export const googleAuth = async (req, res) => {
         // Create JWT for your app
 
         const jwttoken = generatetoken(user._id, res)
-        res.status(200).json({
+        let sendUser = {
             fullName: user.fullName,
             email: user.email,
             id: user._id,
+        }
+        res.status(200).json({
+            user: sendUser,
             token: jwttoken
         })
     } catch (err) {
