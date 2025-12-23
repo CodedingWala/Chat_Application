@@ -5,12 +5,18 @@ import path from "path"
 import connection from "./lib/db.js"
 import { ENV } from "./lib/env.js"
 import cookieParser from "cookie-parser"
+import cors from "cors"
 
 
 
 const app=express()
 app.use(express.json())
 app.use(cookieParser())
+app.use(cors({
+    credentials:true,
+    origin:ENV.CLIENT_URL
+}))
+
 
 const PORT=ENV.PORT || 5000
 

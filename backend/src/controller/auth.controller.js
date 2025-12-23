@@ -47,11 +47,14 @@ export const singup = async (req, res) => {
         if (newuser) {
             const saveduser = await newuser.save()
             const token = generatetoken(saveduser._id, res)
-            res.status(201).json({
+            let sendUser = {
                 fullName: newuser.fullName,
                 email: newuser.email,
                 id: newuser._id,
-                token: token
+            }
+            res.status(201).json({
+                user:sendUser,
+                token:token
             })
 
 
@@ -128,7 +131,7 @@ export const logout = async (_, res) => {
 
 
 export const googleAuth = async (req, res) => {
-    
+
     const { token } = req.body;
     try {
         // Verify Google ID token
@@ -140,7 +143,7 @@ export const googleAuth = async (req, res) => {
         // Check if user exists in MongoDB
         let user = await User.findOne({ email });
         if (!user) {
-            user =  await User.create({
+            user = await User.create({
                 fullName: name,
                 email,
                 profilePic: picture,
@@ -149,13 +152,13 @@ export const googleAuth = async (req, res) => {
         }
 
 
-          try {
-                await sendWelcomeEmail(user.email, user.fullName, ENV.CLIENT_URL)
+        try {
+            await sendWelcomeEmail(user.email, user.fullName, ENV.CLIENT_URL)
 
-            } catch (error) {
-                console.log("failed to send welcome email: ", error.message)
+        } catch (error) {
+            console.log("failed to send welcome email: ", error.message)
 
-            }
+        }
 
 
 
