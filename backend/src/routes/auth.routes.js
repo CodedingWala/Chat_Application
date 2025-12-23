@@ -5,11 +5,14 @@ import { arcjetProtection } from "../middlewre/arcjet.middleware.js";
 const router=express.Router()
 
 
-// router.use(arcjetProtection)
+router.use(arcjetProtection)
 router.post("/singup",singup)
 router.post("/login",login)
 router.post("/google",googleAuth );
 router.post("/logout",logout)
 router.put("/update-profile",protectRoute,updateProfile)
+router.get("/check",(req,res)=>{
+    res.send("user is authenticated")
+})
 
 export default  router
