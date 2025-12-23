@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
 import Chat from './pages/Chat'
-import Login from './pages/Login'
+import Login from './pages/LoginPage'
 import Singup from './pages/SignUpPage'
 import { Authzustand } from './Store/useAuthStore'
 import PageLoad from './component/PageLoad'
