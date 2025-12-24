@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
-import Chat from './pages/Chat'
+import Chat from './pages/ChatPage'
 import Login from './pages/LoginPage'
 import Singup from './pages/SignUpPage'
 import { Authzustand } from './Store/useAuthStore'
@@ -9,12 +9,12 @@ import { Toaster } from "react-hot-toast"
 
 function App() {
   const { authUser, isCheckingAuth, checkAuth, } = Authzustand()
-  // useEffect(() => {
-  //   checkAuth()
-  // }, [checkAuth])
-  // if (isCheckingAuth) {
-  //   return <PageLoad />
-  // }
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
+  if (isCheckingAuth) {
+    return <PageLoad />
+  }
   return (
     <div className="min-h-screen bg-slate-900 relative flex items-center justify-center p-4 overflow-hidden">
       {/* DECORATORS - GRID BG & GLOW SHAPES */}
@@ -24,8 +24,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={authUser ? <Chat /> : <Navigate to="/login" />} />
-        <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/" />} />
-        <Route path="/signup" element={!authUser ? <Singup /> : <Navigate to="/" />} />
+        <Route path="/login" element={authUser ? <Navigate to="/" />: <Login />  } />
+        <Route path="/signup" element={authUser ? <Navigate to="/" />: <Singup /> } />
       </Routes>
 
       <Toaster
