@@ -2,20 +2,28 @@ import { create } from "zustand";
 import { AxiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
-export const Authzustand = create((set) => ({
+export const Authzustand = create((set, get) => ({
     authUser: null,
     isSingingup: false,
-    isCheckingAuth: true,
+    isCheckingAuth: false,
     isLogingIn: false,
+    uploadingImg: false,
 
 
 
     checkAuth: async () => {
+        set({ isCheckingAuth: true })
         try {
-            const res = await AxiosInstance.get("/auth/check")
+            const res = await AxiosInstance.get("/auth/check",{
+                headers:{
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
             set({ authUser: res.data })
         } catch (error) {
-            console.log("some error occured", error.message)
+            const message=error?.response?.data?.message || "Something went wrong"
+            toast.error(message)
+            console.log("some error occured",message)
             set({ authUser: null })
         }
         finally {
@@ -79,9 +87,8 @@ export const Authzustand = create((set) => ({
         try {
             const user = res.data.user
             const token = res.data.token
-            console.log(user)
             set({ authUser: user })
-            console.log(authUser)
+            console.log("getting authuser", get().authUser)
             localStorage.setItem("token", token)
             toast.success("Login successfull")
         } catch (error) {
@@ -113,9 +120,31 @@ export const Authzustand = create((set) => ({
             toast.error(message);
         }
 
+    },
+    updateProfile:async (file) => {
+        set({ uploadingImg: true })
+        try {
+            const res =await AxiosInstance.put("/auth/update-profile", file, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+
+            const user = res.data
+            set({ authUser: user })
+            toast.success("profile updated successfully")
+
+        } catch (error) {
+            const message =
+                error.response?.data?.message ||
+                error.message ||
+                "Loged Out failed";
+
+            console.log("Login error:", error.response?.data);
+            toast.error(message);
+        }finally{
+            set({ uploadingImg: false })
+        }
     }
-
-
-
 
 }))

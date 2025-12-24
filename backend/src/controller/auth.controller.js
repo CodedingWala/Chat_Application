@@ -90,12 +90,12 @@ export const login = async (req, res) => {
 
         const user = await User.findOne({ email })
         if (!user) {
-            return res.status(400).json({ message: "user not found" })
+            return res.status(400).json({ message: "Invalid Credentials" })
         }
 
         const validpasswor = await bcrypt.compare(password, user.password)
         if (!validpasswor) {
-            return res.status(400).json({ message: "invalid password" })
+            return res.status(400).json({ message: "Invalid Credentials" })
         }
 
 
@@ -172,6 +172,7 @@ export const googleAuth = async (req, res) => {
             fullName: user.fullName,
             email: user.email,
             id: user._id,
+            profilePic: user.profilePic
         }
         res.status(200).json({
             user: sendUser,
@@ -183,15 +184,28 @@ export const googleAuth = async (req, res) => {
     }
 }
 
+
+export const check=async (req,res)=>{
+    try {
+        const userId=req.user._id
+        const user=await User.findById(userId).select("-password")
+        res.status(200).json(user)
+    } catch (error) {
+        console.log("error occured in the check user route: ",error.message)
+        res.status(404).json("You are not logedIn")
+    }
+}
+
 export const updateProfile = async (req, res) => {
     try {
         const { profilePic } = req.body
         if (!profilePic) {
             return res.status(400).json({ message: "profile pic is required" })
         }
-        const userId = req.usr._id
-        const uploadresponse = cloudinary.uploader.upload(profilePic)
+        const userId = req.user._id
+        const uploadresponse = await cloudinary.uploader.upload(profilePic)
         const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: uploadresponse.secure_url }, { new: true })
+        console.log("updated user: ", updatedUser ,"And uploadResponse: ",(uploadresponse).secure_url)
 
         res.status(200).json(updatedUser)
 

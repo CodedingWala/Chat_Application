@@ -1,0 +1,66 @@
+import { create } from "zustand";
+import { AxiosInstance } from "../lib/axios";
+import toast from "react-hot-toast";
+
+export const useChatStore= create((set, get) => ({
+    AllContacts: [],
+    messages: [],
+    Chats: [],
+    ActiveTab: "chats",
+    SelectedUser: null,
+    IsMessageLoading: false,
+    IsUserLoading: false,
+    IsSoundeEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === true,
+
+    ToggleSound: () => {
+        localStorage.setItem("isSoundEnabled", !get().IsSoundeEnabled)
+        set({ IsSoundeEnabled: !get().IsSoundeEnabled })
+    },
+
+    setSelectedTab: (tab) => {
+        set({ ActiveTab: tab })
+    },
+
+    setSelectedUser: (user) => {
+        set({ SelectedUser: user })
+    },
+
+    getAllcontacts: async () => {
+        set({ IsUserLoading: true })
+        try {
+            const res = await AxiosInstance.get("/message/contacts", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            set({ AllContacts: res.data })
+            console.log(get().AllContacts)
+        } catch (error) {
+            const message =
+                error?.response?.data?.messages || "Something went wrong";
+            console.error("Some error occurred:", message);
+            toast.error(message);
+        } finally {
+            set({ IsUserLoading: false })
+        }
+    },
+    getChatPartners: async () => {
+        set({ IsUserLoading: true })
+        try {
+            const res = await AxiosInstance.get("/message/chats",{
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            set({ Chats: res.data })
+            console.log(get().Chats)
+        } catch (error) {
+            const message =
+                error?.response?.data?.messages || "Something went wrong";
+            console.error("Some error occurred:", message);
+            toast.error(message);
+        } finally {
+            set({ IsUserLoading: false })
+        }
+    }
+}))
