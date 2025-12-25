@@ -42,7 +42,7 @@ export const sendMessages = async (req, res) => {
         const { text, image } = req.body
         const senderId = req.user._id
 
-        if (receiverId.equals(sen)) {
+        if (receiverId.toString() === senderId.toString()) {
             return res.status(400).json({ message: "you cannot send message to yourself" })
         }
         else if (!text && !image) {
