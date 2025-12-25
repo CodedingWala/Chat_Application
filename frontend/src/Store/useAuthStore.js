@@ -16,7 +16,7 @@ export const Authzustand = create((set, get) => ({
         try {
             const res = await AxiosInstance.get("/auth/check",{
                 headers:{
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${localStorage.getItem("token")} || "" `
                 }
             })
             set({ authUser: res.data })

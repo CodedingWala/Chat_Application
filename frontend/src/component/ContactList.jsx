@@ -22,7 +22,7 @@ function ContactList() {
        AllContacts.map((contact) => {
           return <div
           key={contact._id}
-          className='bg-cyan-500/10 pl-1 pr-2 py-2 cursor-pointer rounded-lg hover:bg-cyan-500/20'
+          className='bg-cyan-500/10 p-4 cursor-pointer rounded-lg hover:bg-cyan-500/20'
           onClick={()=>{setSelectedUser(contact)}}
           >
             <div className='flex items-center justify-start space-x-2'>

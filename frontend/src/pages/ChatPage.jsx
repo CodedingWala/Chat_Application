@@ -16,19 +16,19 @@ function ChatPage() {
   const {getAllcontacts,getChatPartners,ActiveTab,SelectedUser}=useChatStore()
  
   return (
-   <div className='relative w-full max-w-6xl h-[800px]'>
+   <div className='relative w-full max-w-6xl md:h-[800px] h-screen lg:h-[900px]'>
       <BorderAnimatedContainer>
-        <div className='w-80 flex flex-col bg-slate-800/50 backdrop-blur-sm'>
+        <div className={`${SelectedUser? "hidden md:w-80 lg:w-80 md:flex lg:flex" : "w-full md:w-80 lg:w-80 md:flex lg:flex"} flex-col bg-slate-800/50 backdrop-blur-sm`}>
             <ProfileHeader/>
             <ActiveTabSwitch/>
 
-            <div className='flex-1 overflow-y-auto p-1 space-y-2'>
+            <div className={`w-full md:flex-1 overflow-y-auto p-1 space-y-2`}>
               { ActiveTab==="chats"? <ChatList/>:<ContactList/> }
             </div>
         </div>
 
         {/* right */}
-        <div className='flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm'>
+        <div className={`${SelectedUser? "w-full md:flex-1 lg:flex-1" : "hidden md:flex-1 lg:flex-1" } md:flex md:flex-col lg:flex-col  bg-slate-900/50 backdrop-blur-sm`}>
                {SelectedUser? <ChatContainer/>: <NoConversationPlaceHolder/>}
         </div>
       </BorderAnimatedContainer>
