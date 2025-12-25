@@ -10,7 +10,7 @@ import cors from "cors"
 
 
 const app=express()
-app.use(express.json())
+app.use(express.json({limit:"5mb"}))
 app.use(cookieParser())
 app.use(cors({
     credentials:true,
@@ -23,7 +23,7 @@ const PORT=ENV.PORT || 5000
 const __dirname=path.resolve()
 
 
-app.use("/api/auth",authroute)
+app.use("/api/auth",authroute)  
 app.use("/api/message",messageroute)
 
 if(ENV.NODE_ENV==="development"){
