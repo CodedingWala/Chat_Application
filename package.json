@@ -21,9 +21,5 @@
     "url": "https://github.com/CodedingWala/Chat_Application/issues"
   },
   "homepage": "https://github.com/CodedingWala/Chat_Application#readme",
-  "description": "",
-  "dependencies": {
-    "cloudinary": "^2.5.1",
-    "react-router-dom": "^7.11.0"
-  }
+  "description": ""
 }
