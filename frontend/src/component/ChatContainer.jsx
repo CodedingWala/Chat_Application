@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useChatStore } from '../Store/useChatStore'
 import { LoaderIcon } from 'react-hot-toast'
 import ChatHeader from './ChatHeader'
-import NoChatHistoryPlaceholder from './NoChatHistoryPlaceHolder'
+import NoChatHistoryPlaceholder from './NoChatHistoryPlaceholder'
 import { Authzustand } from '../Store/useAuthStore'
 import MessageInput from './MessageInput'
 import MessagesLoadingSkeleton from './MessagesLoadingSkeleton'
@@ -71,7 +71,7 @@ function ChatContainer() {
           ) : IsMessageLoading ?
             <MessagesLoadingSkeleton /> :
             (
-              <NoChatHistoryPlaceholder name={SelectedUser.fullName} />
+              <NoChatHistoryPlaceholder name={SelectedUser?.fullName} />
             )
         }
 
