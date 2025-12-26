@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.js"
+import { getSocketId, io } from "../lib/socket.js"
 import Message from "../models/Message.js"
 import User from "../models/User.js"
 
@@ -65,7 +66,12 @@ export const sendMessages = async (req, res) => {
             image: imageUrl
         })
 
+        
         const savedMessage = await newMessage.save()
+        const SocketId = getSocketId(receiverId)
+        if (SocketId) {
+            io.to(SocketId).emit("newMessage", savedMessage)
+        }
         res.status(200).json(savedMessage)
 
         // todo some code here

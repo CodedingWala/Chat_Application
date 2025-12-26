@@ -8,13 +8,17 @@ import MessageInput from './MessageInput'
 import MessagesLoadingSkeleton from './MessagesLoadingSkeleton'
 
 function ChatContainer() {
-  const { messages, getMessagesById, IsMessageLoading, SelectedUser } = useChatStore()
+  const { messages, getMessagesById, IsMessageLoading, SelectedUser,  subsCribeToMessage,unSubsCribeToMessage } = useChatStore()
   const { authUser } = Authzustand()
   const MessageRef = useRef(null)
   useEffect(() => {
     getMessagesById(SelectedUser._id)
-    console.log(messages)
-  }, [SelectedUser || getMessagesById])
+    subsCribeToMessage()
+    return () => {
+      unSubsCribeToMessage(SelectedUser._id)
+    }
+
+  }, [SelectedUser, getMessagesById , subsCribeToMessage,unSubsCribeToMessage])
 
 
   useEffect(() => {

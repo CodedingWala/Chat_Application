@@ -14,10 +14,13 @@ const io=new Server(server,{
 })
 
 io.use(socketAuthMiddleware)
-
-
 const UsersSocketMap={}
 
+
+
+export const getSocketId=(userId)=>{
+    return UsersSocketMap[userId]
+}
 io.on("connection",(socket)=>{
         console.log("user connected: ",socket.user.fullName)
         const userId=socket.userId
