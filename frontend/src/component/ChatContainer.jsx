@@ -1,4 +1,4 @@
-import React, { useEffect, useEffectEvent, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useChatStore } from '../Store/useChatStore'
 import { LoaderIcon } from 'react-hot-toast'
 import ChatHeader from './ChatHeader'
@@ -10,6 +10,7 @@ import MessagesLoadingSkeleton from './MessagesLoadingSkeleton'
 function ChatContainer() {
   const { messages, getMessagesById, IsMessageLoading, SelectedUser,  subsCribeToMessage,unSubsCribeToMessage } = useChatStore()
   const { authUser } = Authzustand()
+  const [previewImage, setPreviewImage] = useState(null)
   const MessageRef = useRef(null)
   useEffect(() => {
     getMessagesById(SelectedUser._id)
@@ -45,7 +46,10 @@ function ChatContainer() {
                       message.image && (
                         <img src={`${message.image}`}
                           className='rounded-lg h-48 object-cover boreder border-slate-900'
-                          alt="sharedpic" />
+                          alt="sharedpic" 
+                          
+                          onClick={() => setPreviewImage(message.image)}
+                        />
                       )
                     }
 
@@ -73,6 +77,20 @@ function ChatContainer() {
 
       </div>
       <MessageInput />
+
+       {previewImage && (
+      <div
+        className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
+        onClick={() => setPreviewImage(null)}
+      >
+        <img
+          src={previewImage}
+          className="max-w-full max-h-full object-contain"
+          alt="preview"
+          onClick={(e) => e.stopPropagation()} // prevent closing when clicking the image
+        />
+      </div>
+    )}
     </>
   )
 }

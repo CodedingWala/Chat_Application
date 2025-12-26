@@ -117,12 +117,13 @@ export const useChatStore = create((set, get) => ({
 
     subsCribeToMessage: () => {
         const notification = new Audio("/sounds/sounds_notification.mp3")
-        const { SelectedUser } = get()
-        const { socket,  IsSoundeEnabled } = Authzustand.getState()
+        const { SelectedUser ,IsSoundeEnabled } = get()
+        const { socket} = Authzustand.getState()
         if (!SelectedUser) return
         socket.on("newMessage", (message) => {
             const isMessageSendFromSelectedUser = message.senderId.toString() === SelectedUser._id.toString()
-            if (isMessageSendFromSelectedUser) return
+            console.log(isMessageSendFromSelectedUser)
+            if (! isMessageSendFromSelectedUser) return
 
             const currentMessages = get().messages
             set({ messages: [...currentMessages, message] })
