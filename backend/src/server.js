@@ -33,9 +33,7 @@ if(ENV.NODE_ENV==="production"){
     })
 }
 
-// server.listen(PORT,(req,res)=>{
-//     console.log(`server listenning on port ${PORT}`)
-//     connection()
-// })
-
-export default server
+server.listen(PORT,(req,res)=>{
+    console.log(`server listenning on port ${PORT}`)
+    connection()
+})
