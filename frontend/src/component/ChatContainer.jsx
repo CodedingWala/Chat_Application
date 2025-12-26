@@ -71,7 +71,7 @@ function ChatContainer() {
           ) : IsMessageLoading ?
             <MessagesLoadingSkeleton /> :
             (
-              <NoChatHistoryPlaceholder name={SelectedUser.fullName} />
+              <NoChatHistoryPlaceholder name={SelectedUser?.fullName} />
             )
         }
 
