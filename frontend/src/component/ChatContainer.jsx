@@ -29,7 +29,7 @@ function ChatContainer() {
     <>
       <ChatHeader />
 
-      <div className='px-6 py-8 flex-1 overflow-y-auto'>
+      <div className='px-6 py-8 flex-1 overflow-y-auto z-0'>
         {
           (messages.length > 0 && !IsMessageLoading) ? (
             <div className='w-full mx-auto space-y-6'>

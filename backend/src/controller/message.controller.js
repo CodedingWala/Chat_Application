@@ -25,7 +25,6 @@ export const getMessages = async (req, res) => {
                     { senderId: partnerId, receiverId: myId }
                 ]
             })
-        console.log("message: ", messages)
         res.status(200).json(messages)
 
 
