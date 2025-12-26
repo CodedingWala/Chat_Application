@@ -80,6 +80,7 @@ function MessageInput() {
           onChange={handleImageChange}
           className='hidden'
           ref={InputRef}
+          accept="image/*"  
         />
         <button
           type='button'
