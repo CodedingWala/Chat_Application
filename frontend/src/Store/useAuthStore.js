@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { AxiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import io from "socket.io-client"
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : "api/"
+
 
 export const Authzustand = create((set, get) => ({
     authUser: null,
@@ -8,22 +11,25 @@ export const Authzustand = create((set, get) => ({
     isCheckingAuth: false,
     isLogingIn: false,
     uploadingImg: false,
-
+    socket: null,
+    OnlineUsers:[],
 
 
     checkAuth: async () => {
         set({ isCheckingAuth: true })
         try {
-            const res = await AxiosInstance.get("/auth/check",{
-                headers:{
+            if (!localStorage.getItem("token")) return set({ authUser: null })
+            const res = await AxiosInstance.get("/auth/check", {
+                headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")} || "" `
                 }
             })
             set({ authUser: res.data })
+            get().SocketConnection()
         } catch (error) {
-            const message=error?.response?.data?.message || "Something went wrong"
+            const message = error?.response?.data?.message || "Something went wrong"
             toast.error(message)
-            console.log("some error occured",message)
+            console.log("some error occured", message)
             set({ authUser: null })
         }
         finally {
@@ -41,6 +47,7 @@ export const Authzustand = create((set, get) => ({
             localStorage.setItem("token", token)
             set({ authUser: user })
             toast.success("singup successfull")
+            get().SocketConnection()
 
         } catch (error) {
             const message =
@@ -67,6 +74,7 @@ export const Authzustand = create((set, get) => ({
             localStorage.setItem("token", token)
             set({ authUser: user })
             toast.success("singup successfull")
+            get().SocketConnection()
 
         } catch (error) {
             const message =
@@ -91,6 +99,7 @@ export const Authzustand = create((set, get) => ({
             console.log("getting authuser", get().authUser)
             localStorage.setItem("token", token)
             toast.success("Login successfull")
+            get().SocketConnection()
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -110,6 +119,7 @@ export const Authzustand = create((set, get) => ({
             localStorage.removeItem("token")
             set({ authUser: null })
             toast.success("logout successfully")
+            get().disConnectSocket()
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -121,10 +131,10 @@ export const Authzustand = create((set, get) => ({
         }
 
     },
-    updateProfile:async (file) => {
+    updateProfile: async (file) => {
         set({ uploadingImg: true })
         try {
-            const res =await AxiosInstance.put("/auth/update-profile", file, {
+            const res = await AxiosInstance.put("/auth/update-profile", file, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -142,9 +152,42 @@ export const Authzustand = create((set, get) => ({
 
             console.log("Login error:", error.response?.data);
             toast.error(message);
-        }finally{
+        } finally {
             set({ uploadingImg: false })
         }
+    },
+
+    SocketConnection: () => {
+        try {
+            const { authUser } = get()
+            if (!authUser || get().socket?.connected) return
+            const socket = io(BASE_URL, {
+                auth: {
+                    token: localStorage.getItem("token")
+                },
+                withCredentials: true
+            })
+            console.log("inside socketxconnection: ", socket,"port: ",BASE_URL)
+
+            socket.connect()
+            set({ socket })
+            socket.on("getAllUsers", (AllUsers) => {
+                console.log("all users", AllUsers)
+                set({ OnlineUsers: AllUsers })
+            })
+        } catch (error) {
+            const message = error?.response?.data?.message || "Something went wrong"
+            toast.error(message)
+            console.log("some error occured inside socket connection", message)
+        }
+
+    },
+    disConnectSocket: () => {
+        const { socket } = get()
+        if (socket.connected) {
+            socket.disconnect()
+        }
     }
+
 
 }))

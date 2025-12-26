@@ -49,7 +49,7 @@ function MessageInput() {
   }
 
   return (
-    <div className=' p-4 border-t border-slate-700/50'>
+    <div className='justify-self-end p-4 border-t border-slate-700/50 z-10'>
       {
         Imagepreviwe &&
         <div className='max-w-3xl m-auto mb-3 flex justify-start '>
@@ -97,7 +97,6 @@ function MessageInput() {
         >
           <SendIcon className="w-5 h-5" />
         </button>
-
       </form>
 
     </div>

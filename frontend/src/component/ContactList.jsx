@@ -2,9 +2,11 @@ import React, { useEffect } from 'react'
 import { useChatStore } from '../Store/useChatStore'
 import UsersLoadingSkeleton from './UsersLoadingSkeleton'
 import NoChatsFound from './NoChatsFound'
+import { Authzustand } from '../Store/useAuthStore'
 
 function ContactList() {
   const { AllContacts,  getAllcontacts, IsUserLoading, setSelectedUser } = useChatStore()
+  const {OnlineUsers} =Authzustand()
 
 
   useEffect(() => {
@@ -17,16 +19,14 @@ function ContactList() {
     return <NoChatsFound/>
   }
   return (
-      <>
-      {
-       AllContacts.map((contact) => {
+    <>
+      { AllContacts.map((contact) => {
           return <div
           key={contact._id}
           className='bg-cyan-500/10 p-4 cursor-pointer rounded-lg hover:bg-cyan-500/20'
-          onClick={()=>{setSelectedUser(contact)}}
-          >
+          onClick={()=>{setSelectedUser(contact)}}>
             <div className='flex items-center justify-start space-x-2'>
-              <div className='avatar online'>
+              <div className={`avatar ${OnlineUsers.includes(contact._id) ? "online" : "offline"}`}>
                 <div className='size-12 rounded-full '>
                   <img src={`${contact.profile_Pic || "/avatar.png"}`} alt={`${contact.fullName}`} />
                 </div>

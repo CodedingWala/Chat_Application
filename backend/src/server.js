@@ -6,10 +6,10 @@ import connection from "./lib/db.js"
 import { ENV } from "./lib/env.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import { app, server } from "./lib/socket.js"
 
 
 
-const app=express()
 app.use(express.json({limit:"5mb"}))
 app.use(cookieParser())
 app.use(cors({
@@ -33,7 +33,7 @@ if(ENV.NODE_ENV==="development"){
     })
 }
 
-app.listen(PORT,(req,res)=>{
+server.listen(PORT,(req,res)=>{
     console.log(`server listenning on port ${PORT}`)
     connection()
 })

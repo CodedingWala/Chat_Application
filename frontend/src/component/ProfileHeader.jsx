@@ -9,11 +9,12 @@ import { LoaderIcon } from "react-hot-toast";
 
 function ProfileHeader() {
   const mouseClickSound = new Audio("/sounds/sounds_mouse-click.mp3");
-  const { logout, authUser, updateProfile, uploadingImg } = Authzustand();
+  const { logout, authUser, updateProfile, uploadingImg ,OnlineUsers} = Authzustand();
   const {   IsSoundeEnabled, ToggleSound } = useChatStore();
   const [selectedImg, setSelectedImg] = useState(null);
-
   const fileInputRef = useRef(null);
+
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
