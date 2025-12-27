@@ -62,7 +62,7 @@ function MessageInput() {
         </div>
       }
 
-      <form onSubmit={submitHandler} className='max-w-3xl mx-auto flex  space-x-4'>
+      <form onSubmit={submitHandler} className='max-w-3xl lg:mx-auto md:mx-auto mx-1 flex  md:space-x-4 lg:space-x-4 space-x-2'>
         <input type="text"
           onChange={(e) => {
             settext(e.target.value)

@@ -24,7 +24,7 @@ const __dirname=path.resolve()
 
 
 app.use("/api/auth",authroute)  
-app.use("/api/message",messageroute)
+app.use("/api/message",messageroute) 
 
 if(ENV.NODE_ENV==="production"){
     app.use(express.static(path.join(__dirname,"../frontend/dist")))

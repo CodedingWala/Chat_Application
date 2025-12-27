@@ -21,7 +21,6 @@ export const protectRoute = async (req, res,next) => {
 
 
     } catch (error) {
-
         console.log("error occured inside the proteted route middelware:", error.message)
         return res.status(401).json({ message: "unauthorized" })
 

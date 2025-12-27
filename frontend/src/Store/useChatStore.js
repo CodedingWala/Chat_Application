@@ -12,6 +12,7 @@ export const useChatStore = create((set, get) => ({
     IsMessageLoading: false,
     IsUserLoading: false,
     IsSoundeEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === true,
+    DataToDelete:[],
 
     ToggleSound: () => {
         localStorage.setItem("isSoundEnabled", !get().IsSoundeEnabled)
@@ -21,6 +22,11 @@ export const useChatStore = create((set, get) => ({
     setSelectedTab: (tab) => {
         set({ ActiveTab: tab })
     },
+
+    setDataToDelete: (data) => {
+        set({ DataToDelete: data })
+    },
+
 
     setSelectedUser: (user) => {
         set({ SelectedUser: user })
@@ -115,6 +121,43 @@ export const useChatStore = create((set, get) => ({
         }
     },
 
+DeleteMessage: async (userId) => {
+  const { DataToDelete, messages } = get();
+
+  // 1️⃣ Backup current state (for rollback)
+  const previousMessages = [...messages];
+
+  // 2️⃣ Optimistically update UI
+  set({
+    messages: messages.filter(
+      msg => !DataToDelete.some(d => d._id === msg._id)
+    )
+  });
+
+  try {
+    // 3️⃣ Call backend
+    await AxiosInstance.delete(`/message/delete/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      data: { DataToDelete }
+    });
+
+    // 4️⃣ Clear selection after success
+    set({ DataToDelete: [] });
+
+    toast.success("Messages deleted successfully");
+
+  } catch (error) {
+    // 5️⃣ Rollback UI if API fails
+    set({ messages: previousMessages });
+
+    toast.error("Delete failed. Restored messages.");
+    console.error("Optimistic delete failed:", error);
+  }
+},
+
+
     subsCribeToMessage: () => {
         const notification = new Audio("/sounds/sounds_notification.mp3")
         const { SelectedUser ,IsSoundeEnabled } = get()
@@ -138,6 +181,14 @@ export const useChatStore = create((set, get) => ({
         const { socket } = Authzustand.getState()
         socket.off("newMessage")
 
+    },
+
+    messageDeleted:()=>{
+        const { socket } = Authzustand.getState()
+        socket.on("messageDeleted", ({messages,LogedinUserId}) => {
+            if(LogedinUserId !== get().SelectedUser._id) return
+            set({ messages })
+        })
     }
 
 }))
