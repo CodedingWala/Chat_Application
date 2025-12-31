@@ -4,7 +4,7 @@ import UsersLoadingSkeleton from './UsersLoadingSkeleton'
 import NoChatsFound from './NoChatsFound'
 import { Authzustand } from '../Store/useAuthStore'
 import { GroupStore } from '../Store/useGroupChatStore'
-import ShowSearched from './showSearched'
+import ShowSearched from './ShowSearched'
 
 function ContactList() {
   const { AllContacts, getAllcontacts, IsUserLoading, setSelectedUser, clearFilterContacts, isFinding } = useChatStore()
