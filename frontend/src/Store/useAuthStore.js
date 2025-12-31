@@ -7,12 +7,21 @@ const BASE_URL = import.meta.env.MODE === "development" ? import.meta.env.VITE_A
 
 export const Authzustand = create((set, get) => ({
     authUser: null,
+    isSettingClicked:false,
     isSingingup: false,
     isCheckingAuth: false,
     isLogingIn: false,
     uploadingImg: false,
     socket: null,
     OnlineUsers:[],
+
+
+    setSetting:(data)=>{
+        set({isSettingClicked : data})
+    },
+    setIAuthChecking:(data)=>{
+        set({isCheckingAuth : data})
+    },
 
 
     checkAuth: async () => {

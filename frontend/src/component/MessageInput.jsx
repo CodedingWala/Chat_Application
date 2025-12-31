@@ -2,14 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import UseKeyboardSound from '../hooks/randomSound'
 import { useChatStore } from '../Store/useChatStore'
 import { ImageIcon, SendIcon, XIcon } from 'lucide-react'
+import { GroupStore } from '../Store/useGroupChatStore'
 
 
 function MessageInput() {
   const { keyStrokeSound } = UseKeyboardSound()
-  const { IsSoundeEnabled, sendMesage } = useChatStore()
+  const { IsSoundeEnabled, sendMesage, SelectedUser } = useChatStore()
   const [text, settext] = useState("")
   const [Imagepreviwe, setImagepreviwe] = useState(null)
   const InputRef = useRef(null)
+  const { selectedGroup, sendGroupMesage } = GroupStore()
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -19,16 +21,14 @@ function MessageInput() {
     if (IsSoundeEnabled) {
       keyStrokeSound()
     }
-    sendMesage({
-      text: text.trim(),
-      image: Imagepreviwe
-    })
+
+    SelectedUser ? sendMesage({ text: text.trim(), image: Imagepreviwe }) : selectedGroup && sendGroupMesage({ text: text.trim(), image: Imagepreviwe })
+
     settext("")
     setImagepreviwe(null)
     if (InputRef.current) {
       InputRef.current.value = ""
     }
-
   }
 
   const handleImageChange = (e) => {
@@ -80,7 +80,7 @@ function MessageInput() {
           onChange={handleImageChange}
           className='hidden'
           ref={InputRef}
-          accept="image/*"  
+          accept="image/*"
         />
         <button
           type='button'

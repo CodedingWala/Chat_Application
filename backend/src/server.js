@@ -1,6 +1,7 @@
 import express from "express"
 import authroute from "./routes/auth.routes.js"
 import messageroute from "./routes/message.routes.js"
+import GroupChatRoute from "./routes/Group.routes.js"
 import path from "path"
 import connection from "./lib/db.js"
 import { ENV } from "./lib/env.js"
@@ -25,6 +26,7 @@ const __dirname=path.resolve()
 
 app.use("/api/auth",authroute)  
 app.use("/api/message",messageroute) 
+app.use("/api/group",GroupChatRoute)
 
 if(ENV.NODE_ENV==="production"){
     app.use(express.static(path.join(__dirname,"../frontend/dist")))

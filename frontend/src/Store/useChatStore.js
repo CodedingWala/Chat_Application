@@ -5,15 +5,26 @@ import { Authzustand } from "./useAuthStore";
 
 export const useChatStore = create((set, get) => ({
     AllContacts: [],
-    messages: [],
     Chats: [],
+    FindingData:[],
+    isFinding:false,
+    messages: [],
     ActiveTab: "chats",
     SelectedUser: null,
     IsMessageLoading: false,
     IsUserLoading: false,
     IsSoundeEnabled: JSON.parse(localStorage.getItem("isSoundEnabled")) === true,
     DataToDelete:[],
+    ChatGroups:[],
 
+    setFindingData:(data)=>{
+        set({FindingData : data})
+        set({isFinding:true})
+    },
+    clearFindingData:()=>{
+        set({FindingData : []})
+        set({isFinding:false})
+    },
     ToggleSound: () => {
         localStorage.setItem("isSoundEnabled", !get().IsSoundeEnabled)
         set({ IsSoundeEnabled: !get().IsSoundeEnabled })
@@ -44,7 +55,7 @@ export const useChatStore = create((set, get) => ({
             console.log(get().AllContacts)
         } catch (error) {
             const message =
-                error?.response?.data?.messages || "Something went wrong";
+            error?.response?.data?.messages || "Something went wrong";
             console.error("Some error occurred:", message);
             toast.error(message);
         } finally {
@@ -59,8 +70,9 @@ export const useChatStore = create((set, get) => ({
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             })
-            set({ Chats: res.data })
+            set({ Chats: res.data})
             console.log(get().Chats)
+            console.log("response: ",res.data)
         } catch (error) {
             const message =
                 error?.response?.data?.messages || "Something went wrong";

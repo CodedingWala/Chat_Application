@@ -1,15 +1,16 @@
 import { useState, useRef } from "react";
-import { LogOutIcon, VolumeOffIcon, Volume2Icon } from "lucide-react";
+import { LogOutIcon, VolumeOffIcon, Volume2Icon,SettingsIcon } from "lucide-react";
 import { useChatStore } from "../Store/useChatStore";
 import { Authzustand } from "../Store/useAuthStore";
 import { LoaderIcon } from "react-hot-toast";
+import {XIcon} from "lucide-react"
 
 
 
 
 function ProfileHeader() {
   const mouseClickSound = new Audio("/sounds/sounds_mouse-click.mp3");
-  const { logout, authUser, updateProfile, uploadingImg ,OnlineUsers} = Authzustand();
+  const { logout, authUser, updateProfile, uploadingImg ,OnlineUsers,isSettingClicked, setSetting} = Authzustand();
   const {   IsSoundeEnabled, ToggleSound } = useChatStore();
   const [selectedImg, setSelectedImg] = useState(null);
   const fileInputRef = useRef(null);
@@ -70,7 +71,7 @@ function ProfileHeader() {
         </div>
 
         {/* BUTTONS */}
-        <div className="flex gap-4 items-center">
+        <div className="flex w-full justify-end gap-6 items-center">
           {/* LOGOUT BTN */}
           <button
             className="text-slate-400 hover:text-slate-200 transition-colors"
@@ -95,9 +96,19 @@ function ProfileHeader() {
               <VolumeOffIcon className="size-5" />
             )}
           </button>
+
+          <button className="text-slate-400 hover:text-slate-200 transition-colors">
+              <SettingsIcon className="size-5" 
+              onClick={()=>{
+                setSetting(!isSettingClicked)
+              }}
+              />
+          </button>
         </div>
       </div>
     </div>
+    
+
   );
 }
 export default ProfileHeader;
