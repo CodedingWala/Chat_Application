@@ -3,9 +3,9 @@ import { useChatStore } from '../Store/useChatStore'
 import UsersLoadingSkeleton from './UsersLoadingSkeleton'
 import NoChatsFound from './NoChatsFound'
 import { Authzustand } from '../Store/useAuthStore'
-import ShowSearched from './showSearched'
 import { GroupStore } from '../Store/useGroupChatStore'
 import { useRef } from 'react'
+import ShowSearched from './ShowSearched'
 
 function ChatList() {
   const { Chats, getChatPartners, IsUserLoading, setSelectedUser, isFinding } = useChatStore()
