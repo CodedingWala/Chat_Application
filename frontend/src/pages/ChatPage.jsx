@@ -37,7 +37,7 @@ function ChatPage() {
               e.preventDefault()
               submitHandler(e)
             }}
-            className={`${SelectedUser ? "hidden md:w-80 lg:w-80 md:flex lg:flex" : "w-full md:w-80 lg:w-80 md:flex lg:flex pt-4"} flex-col bg-slate-800/50 backdrop-blur-sm h-full`} action="">
+            className={`${SelectedUser ? "hidden md:w-80 lg:w-80 md:flex lg:flex h-screen" : "w-full md:w-80 lg:w-80 md:flex lg:flex pt-4"} flex-col bg-slate-800/50 backdrop-blur-sm h-full`} action="">
 
             <div className=' flex flex-col w-full justify-center items-center bg-slate-900/50 backdrop-blur-sm gap-2 h-1/6'>
 
@@ -65,7 +65,7 @@ function ChatPage() {
             </div>
 
 
-            <div className="w-full h-screen flex-1 overflow-y-auto p-1 space-y-2 borde">
+            <div className="w-full h-[80%] creen flex-1 overflow-y-auto p-1 space-y-2 borde">
 
               {Chats.length > 0 && <ChatList />}
               <ContactList />

@@ -79,7 +79,7 @@ function LoginPage() {
                     Don't have an account? SignIn
                   </Link>
                 </div>
-                <div className="mt-6 flex justify items-center w-full">
+                <div className="justify-self-center mt-6">
                   <GoogleLogin
                     onSuccess={async (credentialResponse) => {
                       const token = credentialResponse.credential;
