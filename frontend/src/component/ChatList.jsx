@@ -9,8 +9,8 @@ import ShowSearched from './ShowSearched'
 
 function ChatList() {
   const { Chats, getChatPartners, IsUserLoading, setSelectedUser, isFinding } = useChatStore()
-  const { OnlineUsers,isSettingClicked } = Authzustand()
-  const {setSelectMembers,selectMembers, setSelectedGroup }=GroupStore()
+  const { OnlineUsers, isSettingClicked } = Authzustand()
+  const { setSelectMembers, selectMembers, setSelectedGroup } = GroupStore()
 
   useEffect(() => {
     getChatPartners()
@@ -20,42 +20,45 @@ function ChatList() {
     return <NoChatsFound />
   }
 
-const memberSelecct=(chat)=>{
-    if(! isSettingClicked){
+  const memberSelecct = (chat) => {
+    if (!isSettingClicked) {
       return setSelectMembers([])
     }
 
-    if(selectMembers.includes(chat._id)){
-      setSelectMembers(selectMembers.filter(id=>id!==chat._id))
-    }else{
-      setSelectMembers([...selectMembers,chat._id])
+    if (selectMembers.includes(chat._id)) {
+      setSelectMembers(selectMembers.filter(id => id !== chat._id))
+    } else {
+      setSelectMembers([...selectMembers, chat._id])
     }
-}
+  }
 
   return (
     <>
       {!isFinding ? (
         Chats.map((chat) => (
-          
-          
+
+
           <div
-          
+
             key={chat._id}
-            className={`${(isSettingClicked && selectMembers.includes(contact._id))? "bg-cyan-500 " : "bg-cyan-500/10 rounded-lg hover:bg-cyan-500/20"} p-4 cursor-pointer `}
+            className={`${(isSettingClicked && selectMembers.includes(chat._id))
+              ? "bg-cyan-500 "
+              : "bg-cyan-500/10 rounded-lg hover:bg-cyan-500/20"} p-4 cursor-pointer `}
+
             onClick={() => {
-              if(isSettingClicked){
+              if (isSettingClicked) {
 
                 memberSelecct(chat)
-              }else{
+              } else {
                 setSelectedUser(chat)
-                 setSelectedGroup(null)
+                setSelectedGroup(null)
               }
             }
 
 
             }
           >
-            
+
             <div className='flex items-center justify-start space-x-2'>
               <div className={`avatar ${OnlineUsers.includes(chat._id) ? "online" : "offline"}`}>
                 <div className='size-12 rounded-full'>
@@ -65,10 +68,10 @@ const memberSelecct=(chat)=>{
               <h4 className='text-slate-200 font-medium'>{chat.fullName}</h4>
             </div>
           </div>
-       ))
+        ))
       ) : (<>
         <ShowSearched />
-        </>
+      </>
       )}
     </>
 
