@@ -65,7 +65,7 @@ function ChatPage() {
             </div>
 
 
-            <div className="w-full md:flex-1  overflow-y-auto p-1 space-y-2 borde">
+            <div className="w-full h-screen flex-1 overflow-y-auto p-1 space-y-2 borde">
 
               {Chats.length > 0 && <ChatList />}
               <ContactList />
